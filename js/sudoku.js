@@ -18,16 +18,16 @@ const easySudokuPuzzle = [
     [0, 9, 0, 2, 0, 0, 6, 0, 0]
 ]
 
-const hardSudokuPuzzle = [
-    [0, 7, 1, 2, 0, 4, 0, 0, 0],
-    [8, 0, 5, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1, 6, 0, 2, 0],
-    [3, 0, 2, 6, 0, 0, 8, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 1, 5],
-    [0, 9, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 9, 0, 2, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [5, 0, 4, 3, 0, 0, 0, 6, 2]
+const hardSudokuPuzzle = [ 
+    [1, 0, 5, 7, 0, 0, 0, 4, 0],
+    [0, 7, 0, 5, 0, 0, 2, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 6, 0],
+    [0, 0, 8, 3, 0, 1, 0, 0, 0],
+    [0, 5, 4, 9, 0, 8, 6, 1, 0],
+    [0, 0, 0, 2, 0, 6, 8, 0, 0],
+    [0, 8, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 2, 0, 9, 0],
+    [0, 9, 0, 0, 0, 7, 1, 0, 4]
 ]
 
 // ============
@@ -36,103 +36,88 @@ const hardSudokuPuzzle = [
 // - A sudoku's original format must not be altered, but used as a reference to update a new board
 // - Create functions to return boolean for whether an integer is valid at a row / column / grid
 // - Construct array of arrays to hold viable solutions? If array.length === 1 populate solution board
-const gIndices = [ [ 0, 1, 2 ], [ 3, 4, 5 ], [6, 7, 8] ]
+
 
 
 const solveSudoku = sudoku => {
 
-    const solution = [
-        [...sudoku[0]],
-        [...sudoku[1]],
-        [...sudoku[2]],
-        [...sudoku[3]],
-        [...sudoku[4]],
-        [...sudoku[5]],
-        [...sudoku[6]],
-        [...sudoku[7]],
-        [...sudoku[8]]
-    ]
+    const gIndices = [ [ 0, 1, 2 ], [ 3, 4, 5 ], [6, 7, 8] ]
 
-    const checkGrid = (sol, int, row, col) => {
+    const checkGrid = (board, int, row, col) => {
         // returns true if int is NOT found
         const gRow = Math.floor( row / 3 )
         const gCol = Math.floor( col / 3 )
     
         for ( const i of gIndices[gRow] ) {
             for ( const ii of gIndices[gCol] ) {
-                if ( sol[i][ii] === int ) return false
+                if ( board[i][ii] === int ) return false
             }
         }
         return true
     }
 
-    const checkRow = (sol, int, row) => {
-        for ( const i of sol[row] ) {
+    const checkRow = (board, int, row) => {
+        // returns true if int is NOT found
+        for ( const i of board[row] ) {
             if (i === int) return false
         }
         return true
     }
 
-    const checkCol = (sol, int, col) => {
-        for ( const row of sol ) {
+    const checkCol = (board, int, col) => {
+        // returns true if int is NOT found
+        for ( const row of board ) {
             if (row[col] === int) return false
         }
         return true
     }
 
-    let r = 0
-    let c = 0
-    let reIterate = false
+    const solveAtCurrentPosition = ( board, row, col ) => {
+        // start by incrementing position
+        // If we hit the end of a row, circle to the next row
+        if ( col === 8 ) {
+            row++
+            col = 0
+        } else {
+            col++
+        }
+        // if we hit row === 9 we have completed the board!
+        if ( row === 9 ) return board
 
-    while (r < 9) {
-        while (c < 9) {
-            // sudokuValue is the value of the input board at that grid location
-            let currentValue = solution[r][c]
-            let options = []
+        // if the board has anything other than 0 value, we have a templated number.  Skip forward or return back only!
+        if ( board[row][col] !== 0 ) {
+            // checks for solution at current position
+            let finalBoard = solveAtCurrentPosition( board, row, col )
+            // we have a solution? return the board
+            if ( !!finalBoard ) return finalBoard
+            // we don't have a solution, we need to loop earlier in the board
+            else return false
+        }
+        // ==========================================
+        // ONLY IF VALUE DOES EQUAL 0 WE MAKE IT HERE
+        // ==========================================
 
-            if ( currentValue !== 0 ) {
-                // CONTINUE IF WE ALREADY FOUND A VIABLE SOLUTION HERE
-                c++
-                continue
-            } else {
-                // LOGIC FOR SEARCHING THE BOARD.  WE ONLY ASSIGN A VALUE IF THERE IS A SINGLE VIABLE SOLUTION
-                for (let int = 1; int < 10; int++) {
-                    if ( checkGrid( solution, int, r, c ) && checkRow( solution, int, r ) && checkCol( solution, int, c ) ) options.push(int)
-
-                    if (options.length > 1) break
-                }
-                console.log(r, 'x', c, options)
-
-                if (options.length > 1) {
-                    reIterate = true
-                    console.log('reIterate:', reIterate)
-                }
-
-                else if ( options.length === 1 ) {
-                    solution[r][c] = options[0]
-                    if ( !reIterate ) continue
-                    else {
-                        r = -1
-                        reIterate = false
-                        break
-                    }
-                }
-
-                c++
+        // loop over every possible integer
+        for (let int = 1; int < 10; int++) {
+            // Check the 3 conditions of a valid move
+            if ( checkGrid(board, int, row, col) && checkRow(board, int, row) && checkCol(board, int, col) ) {
+                // We found a valid move! First update the board
+                board[row][col] = int
+                // begin recursion! We will only ever get back to this point if a call to the fx
+                // succeeds our if row === 9 statement
+                let finalBoard = solveAtCurrentPosition( board, row, col )
+                if ( !!finalBoard ) return finalBoard
             }
         }
-    c = 0
-    r++
+        // If we complete the loop without returning a finalBoard, something went wrong earlier in the puzzle
+        // return false and reset value so we can continue loop there
+        board[row][col] = 0
+        return false
     }
-    return solution
+
+    finalBoard = solveAtCurrentPosition( sudoku, 0, -1 )
+
+    return finalBoard
 }
-
-// THIS SOLUTION DOES NOT WORK IN ALL ( OR MOST ) CASES. IT ONLY SOLVES PUZZLES THAT ARE 
-// EASY ENOUGH TO HAVE SINGLE NUMBER SOLUTIONS ALL THE WAY THROUGH BUT WILL FAIL OTHERWISE
-
-// ====================================================================== //
-// IMPLEMENT A BACKTRACKING / DEPTH FIRST SEARCH METHOD TO SOLVE THE PUZZLE!
-// ====================================================================== //
-
-console.table(solveSudoku(easySudokuPuzzle))
-// console.table(solveSudoku(hardSudokuPuzzle))
+// console.table(solveSudoku(easySudokuPuzzle))
+console.table(solveSudoku(hardSudokuPuzzle))
