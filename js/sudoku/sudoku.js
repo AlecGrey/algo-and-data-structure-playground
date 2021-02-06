@@ -18,7 +18,7 @@ const easySudokuPuzzle = [
     [0, 9, 0, 2, 0, 0, 6, 0, 0]
 ]
 
-const hardPuzzleBoard = [ 
+const hardSudokuPuzzle = [ 
     [1, 0, 5, 7, 0, 0, 0, 4, 0],
     [0, 7, 0, 5, 0, 0, 2, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 6, 0],
@@ -29,6 +29,25 @@ const hardPuzzleBoard = [
     [0, 0, 1, 0, 0, 2, 0, 9, 0],
     [0, 9, 0, 0, 0, 7, 1, 0, 4]
 ]
+
+function sleep(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+}
+
+const updateBoardValue = (value, row, col) => {
+    // grab board from DOM
+    const htmlBoard = document.getElementById('input-table')
+    // grab cell from board
+    const cell = htmlBoard.children[row].children[col].children[0]
+    // paint text red
+    cell.className = 'solution-cell'
+    // update value on the board
+    cell.value = value    
+}
 
 const solveSudoku = sudoku => {
 
@@ -90,11 +109,12 @@ const solveSudoku = sudoku => {
 
         // loop over every possible integer
         for (let int = 1; int < 10; int++) {
-            console.log(row, 'x', col)
             // Check the 3 conditions of a valid move
             if ( checkGrid(board, int, row, col) && checkRow(board, int, row) && checkCol(board, int, col) ) {
                 // We found a valid move! First update the board
                 board[row][col] = int
+                // update value on the board
+                updateBoardValue(int, row, col)
                 // begin recursion!
                 let finalBoard = solveAtCurrentPosition( board, row, col )
                 // if we receive a finalBoard, we have successfully solved the puzzle!
@@ -105,6 +125,7 @@ const solveSudoku = sudoku => {
         // If we complete the loop without returning a finalBoard, something went wrong earlier in the puzzle
         // return false and reset value so we can continue loop there
         board[row][col] = 0
+        updateBoardValue('', row, col)
         return false
     }
 
@@ -112,6 +133,3 @@ const solveSudoku = sudoku => {
 
     return finalBoard
 }
-
-// console.table(solveSudoku(easySudokuPuzzle));
-console.table(solveSudoku(hardSudokuPuzzle));

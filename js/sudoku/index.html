@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel='stylesheet' href="./index.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Solver</title>
+</head>
+<body>
+    <h1>Sudoku Solver</h1>
+    <p>Please input to the grid below! If the given Sudoku Puzzle is solvable, our algorithm will determine the solution. For blank spaces, you may either leave them blank, or place a 0 value.</p>
+
+    <table id='input-table'>
+    </table>
+    
+    <div id='solve-button'' class='center'>
+        <button id='solve-button'>Solve</button>
+        <button id='hide-button'>Hide Solution</button>
+        <button id='reset-button'>Reset</button>
+    </div>
+
+    <p id='response'></p>
+
+    <!-- SCRIPT DEPENDENCIES -->
+    <script defer src='./sudoku.js'></script>
+    <script defer src='./index.js'></script>
+</body>
+</html>
