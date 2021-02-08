@@ -19,13 +19,15 @@
  */
 var hasCycle = function(head) {
     try {
-        let [A, B] = [head, head.next]
+        let A = head
+        let B = head.next
         while (A !== B) {
             A = A.next
             B = B.next.next
         }
         return true
-    } catch {
+    } 
+    catch {
         return false
     }
 };
