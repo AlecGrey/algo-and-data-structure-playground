@@ -18,14 +18,16 @@
  * @return {boolean}
  */
 var hasCycle = function(head) {
-    if (!head) return false
-    let [A, B] = [head, head]
-
-    while (B.next !== null && B.next.next !== null) {
-        [A, B] = [A.next, B.next.next]
-        if (A === B) return true
+    try {
+        let [A, B] = [head, head.next]
+        while (A !== B) {
+            A = A.next
+            B = B.next.next
+        }
+        return true
+    } catch {
+        return false
     }
-    return false
 };
 // @lc code=end
 
