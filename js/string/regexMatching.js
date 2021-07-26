@@ -27,6 +27,14 @@ var isMatch = function(s, p) {
         if (pi >= p.length) return false; // WE STILL HAVE REMAINING STRINGS BUT NO RULES LEFT!
         // 2. check current rule against the string & pattern character
         matchingPrevious = p[pi] == "*"; // check whether we are matching the CURRENT or PREVIOUS pattern index
+        if (matchingPrevious) {
+            // IF THE CHARACTERS ON BOTH SIDES OF THE * ARE THE SAME, THE 2ND CHARACTER IS REDUNDANT
+            if (p[pi - 1] === p[pi + 1]) {
+                // IF A * FOLLOWS THE DESIRED DELETION CHARACTER, WE NEED TO REMOVE IT AS WELL
+                if (p[pi+2] === "*") p = p.slice(0, pi+1) + p.slice(pi+3);
+                else p = p.slice(0, pi+1) + p.slice(pi+2);
+            }
+        }
         stringChar = s[si];
         patternChar = matchingPrevious ? p[pi - 1] : p[pi]; // if current rule is *, chech stringChar against previous character
         valid = checkCharacterAgainstRule(stringChar, patternChar); // check character against rule
@@ -49,6 +57,8 @@ var isMatch = function(s, p) {
     }
     // we completed the string and found no matching errors.
     // 4. check if any remaining rules
+    console.log(si);
+    console.log(pi);
     if (pi == p.length - 1 && p[pi] == "*") return true; // remaining pattern character is LAST, AND is a *
     else if (pi == p.length - 2 && p[pi + 1] == "*") return true; // next pattern ahead is LAST, AND is a *, meaning current pattern can be anything and still pass.
     else if (pi <= p.length - 1) return false; // if the previous two instances fail, AND we have remaining patterns to match, we FAIL
@@ -66,6 +76,8 @@ var checkCharacterAgainstRule = function(char, patternChar) {
 // console.log(isMatch("aab", "c*a*b")); // true
 // console.log(isMatch("mississippi", "mis*is*p*.")); // false
 // console.log(isMatch("mississippi", "mis*is*.p*.")); // true
-// console.log(isMatch("aaa", "aaaa")); // true
-console.log(isMatch("aa", "a*")); // true
-console.log(isMatch("aaa", "a*a")); // true DID NOT COMPLETE
+// console.log(isMatch("aaa", "aaaa")); // false
+// console.log(isMatch("aa", "a*")); // true
+// console.log(isMatch("aaa", "a*a")); // true
+console.log(isMatch("aaa", "ab*a*c*a")); // true
+
