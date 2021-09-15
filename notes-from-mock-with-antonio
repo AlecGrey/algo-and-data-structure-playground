@@ -1,0 +1,160 @@
+/*
+https://medium.com/javascript-scene/the-two-pillars-of-javascript-ee6f3281e7f3
+https://medium.com/javascript-scene/the-two-pillars-of-javascript-pt-2-functional-programming-a63aa53a41a4
+
+characteristic of OOP
+inheritance, encapsulation, polymorphism [, abstraction]
+https://stackify.com/oop-concept-for-beginners-what-is-encapsulation/
+
+favour composition over class inheritance
+https://youtu.be/wfMtDGfHWpA
+
+prototype chain
+
+DESIGN PATTERNS
+https://www.telerik.com/blogs/design-patterns-in-javascript
+BOOK https://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612
+Design patterns are documented solutions to commonly occurring problems in software engineering. 
+Engineers don’t have to bang their heads on the problems that someone else has already solved.
+architectual: MVC, MVVM, MVP, ...
+creational: singleton, factory, builder
+behavioral: observer, iterator
+structural: adapter, decorator
+
+REACT:
+one way data flow
+
+React component’s lifecycle
+Initial Rendering Phase: 
+This is the phase when the component is about to start its life journey and make its way to the DOM.
+Updating Phase: 
+Once the component gets added to the DOM, it can potentially update and re-render only when a prop or state change occurs. That happens only in this phase.
+Unmounting Phase: 
+This is the final phase of a component’s life cycle in which the component is destroyed and removed from the DOM.
+
+METHODS:
+componentWillMount() – Executed just before rendering takes place both on the client as well as server-side.
+componentDidMount() – Executed on the client side only after the first render.
+componentWillReceiveProps() – Invoked as soon as the props are received from the parent class and before another render is called.
+shouldComponentUpdate() – Returns true or false value based on certain conditions. If you want your component to update, return true else return false. By default, it returns false.
+componentWillUpdate() – Called just before rendering takes place in the DOM.
+componentDidUpdate() – Called immediately after rendering takes place.
+componentWillUnmount() – Called after the component is unmounted from the DOM. It is used to clear up the memory spaces.
+
+PRINCIPLES OF REDUX:
+Single source of truth: 
+The state of the entire application is stored in an object/ state tree within a single store. The single state tree makes it easier to keep track of changes over time and debug or inspect the application.
+State is read-only: 
+The only way to change the state is to trigger an action. An action is a plain JS object describing the change. Just like state is the minimal representation of data, the action is the minimal representation of the change to that data. 
+Changes are made with pure functions: 
+In order to specify how the state tree is transformed by actions, you need pure functions. Pure functions are those whose return value depends solely on the values of their arguments.
+https://www.nicoespeon.com/en/2015/01/pure-functions-javascript/
+https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-pure-function-d1c076bec976
+
+
+data structures
+*/
+
+/*
+
+Class Inheritance: 
+instances inherit from classes (like a blueprint — a description of the class), and create sub-class relationships: hierarchical class taxonomies. 
+Instances are typically instantiated via constructor functions with the `new` keyword. Class inheritance may or may not use the `class` keyword from ES6.
+
+Prototypal Inheritance: 
+instances inherit directly from other objects. Instances are typically instantiated via factory functions or `Object.create()`. 
+Instances may be composed from many different objects, allowing for easy selective inheritance.
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+
+
+
+OOP Pros: It’s easy to understand the basic concept of objects and easy to interpret the meaning of method calls. OOP tends to use an imperative style rather than a declarative style, which reads like a straight-forward set of instructions for the computer to follow.
+OOP Cons: OOP Typically depends on shared state. Objects and behaviors are typically tacked together on the same entity, which may be accessed at random by any number of functions with non-deterministic order, which may lead to undesirable behavior such as race conditions.
+FP Pros: Using the functional paradigm, programmers avoid any shared state or side-effects, which eliminates bugs caused by multiple functions competing for the same resources. With features such as the availability of point-free style (aka tacit programming), functions tend to be radically simplified and easily recomposed for more generally reusable code compared to OOP.
+FP also tends to favor declarative and denotational styles, which do not spell out step-by-step instructions for operations, but instead concentrate on what to do, letting the underlying functions take care of the how. This leaves tremendous latitude for refactoring and performance optimization, even allowing you to replace entire algorithms with more efficient ones with very little code change. (e.g., memoize, or use lazy evaluation in place of eager evaluation.)
+Computation that makes use of pure functions is also easy to scale across multiple processors, or across distributed computing clusters without fear of threading resource conflicts, race conditions, etc…
+FP Cons: Over exploitation of FP features such as point-free style and large compositions can potentially reduce readability because the resulting code is often more abstractly specified, more terse, and less concrete.
+More people are familiar with OO and imperative programming than functional programming, so even common idioms in functional programming can be confusing to new team members.
+FP has a much steeper learning curve than OOP because the broad popularity of OOP has allowed the language and learning materials of OOP to become more conversational, whereas the language of FP tends to be much more academic and formal. FP concepts are frequently written about using idioms and notations from lambda calculus, algebras, and category theory, all of which requires a prior knowledge foundation in those domains to be understood.
+
+The tight coupling problem 
+The fragile base class problem
+Inflexible hierarchy problem
+The duplication by necessity problem
+The Gorilla/banana problem
+https://vimeo.com/69255635
+
+
+*/
+
+
+class MyComponent extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            name: 'Maxx',
+            id: '101'
+        }
+    }
+    render()
+        {
+            setTimeout(()=>{this.setState({name:'Jaeha', id:'222'})},2000)
+            return (                                 
+ 
+<div>
+                   
+<h1>Hello {this.state.name}</h1>
+     
+<h2>Your Id is {this.state.id}</h2>
+ 
+                   </div>
+ 
+            );
+        }
+    }
+ReactDOM.render(
+    <MyComponent/>, document.getElementById('content')
+);
+
+
+
+/*
+
+div {
+	height: 200px;
+	width: 50%;
+}
+
+%, px, pt (1pt = 1/72 inch), mm, cm, in, em, rem, vh (1vh = 1% of viewport height), vw, pi (= 12pt), auto
+
+*/
+
+// 1- reverse a string (without using str.reverse())
+// 2- find out if a given string is a palindrome
+//		isPalindrome("racecar") = true
+//		isPalindrome("california") = false
+// 3- given an array of integers find the most repeated element.
+//		findMostRepeated([3,4,4,4,5,5,6,6,6,1,1,4,4,4,4,4,4]) = 4
+// 4- from a unsorted array, check whether there are any two numbers that will sum up to a given number
+//		sumFinder([6,4,3,2,1,7], 9) = true
+// 5- we have an unsorted array of integers, the array is supposed to contain numbers from 1 to array.length with no repetitions.
+//    we assume one of the numbers is always missing, find the missing number.
+//		findMissing([1,3,5,2]) = 4
+// 6- count the number of zeros from 1 to a given n
+//		countZeros(100) = 11 because     (10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
+// antoniotari11@gmail.com
+
+
+// const findMissing = (arr) => {
+// 	// calc length and assign sum of length to n
+// 	let n
+// 	for (let i=1; i <= arr.length; i++) {
+// 		n += i
+// 	}
+// 	console.log(n)
+// 	for (let j of arr) {
+// 		n -= j
+// 	}
+// 	return n
+// }

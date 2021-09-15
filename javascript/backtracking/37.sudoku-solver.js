@@ -14,7 +14,6 @@ var solveSudoku = function(sudoku) {
     const gIndices = [ [ 0, 1, 2 ], [ 3, 4, 5 ], [6, 7, 8] ]
 
     const checkGrid = (board, int, row, col) => {
-        // returns true if int is NOT found
         const gRow = Math.floor( row / 3 )
         const gCol = Math.floor( col / 3 )
     
@@ -27,7 +26,6 @@ var solveSudoku = function(sudoku) {
     }
 
     const checkRow = (board, int, row) => {
-        // returns true if int is NOT found
         for ( const i of board[row] ) {
             if (i === int) return false
         }
@@ -35,7 +33,6 @@ var solveSudoku = function(sudoku) {
     }
 
     const checkCol = (board, int, col) => {
-        // returns true if int is NOT found
         for ( const row of board ) {
             if (row[col] === int) return false
         }
@@ -43,8 +40,7 @@ var solveSudoku = function(sudoku) {
     }
 
     const solveAtCurrentPosition = ( board, row, col ) => {
-        // start by incrementing position
-        // If we hit the end of a row, circle to the next row
+        // increment position, allow to start new rows
         if ( col === 8 ) {
             row++
             col = 0
@@ -60,13 +56,9 @@ var solveSudoku = function(sudoku) {
             let finalBoard = solveAtCurrentPosition( board, row, col )
             // we have a solution? return the board
             if ( !!finalBoard ) return finalBoard
-            // we don't have a solution, we need to loop earlier in the board
+            // no solution yet found, backtrack
             else return false
         }
-        // =========================================
-        //   Passes this point ONLY if value === 0
-        // =========================================
-
         // loop over every possible integer
         for (let int = 1; int < 10; int++) {
             let num = int.toString()
@@ -76,18 +68,16 @@ var solveSudoku = function(sudoku) {
                 board[row][col] = num
                 // begin recursion!
                 let finalBoard = solveAtCurrentPosition( board, row, col )
-                // if we receive a finalBoard, we have successfully solved the puzzle!
-                // Deliver the good news back down the chain of function calls
+                // if a board is returned as opposed to false, we solved the board!
                 if ( !!finalBoard ) return finalBoard
             }
         }
-        // If we complete the loop without returning a finalBoard, something went wrong earlier in the puzzle
-        // return false and reset value so we can continue loop there
+        // if we reach this point all digits have been tested and none passed, backtrack
         board[row][col] = '.'
         return false
     }
-
-    finalBoard = solveAtCurrentPosition( sudoku, 0, -1 ) 
+    // entry point
+    finalBoard = solveAtCurrentPosition( sudoku, 0, -1 )
 };
 // @lc code=end
 

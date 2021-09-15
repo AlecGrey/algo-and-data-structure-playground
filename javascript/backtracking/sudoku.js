@@ -114,4 +114,4 @@ const solveSudoku = sudoku => {
 }
 
 // console.table(solveSudoku(easySudokuPuzzle));
-console.table(solveSudoku(hardSudokuPuzzle));
+console.table(solveSudoku(easySudokuPuzzle));

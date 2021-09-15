@@ -19,8 +19,8 @@
  */
 var hasCycle = function(head) {
     try {
-        let A = head
-        let B = head.next
+        let A = head //walker
+        let B = head.next //runner
         while (A !== B) {
             A = A.next
             B = B.next.next
